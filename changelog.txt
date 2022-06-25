@@ -4274,7 +4274,7 @@ v8.99
  - v8.99.519  Merge pull request #2331 from RainWarrior/model-animation
               Model animation system
  - v8.99.518  Model animation system.
-              Main things of interest:
+              com.lazackna.redstoneadditions.Main things of interest:
                 * IAnimationStateMachine - state machine for animations; can load
                   from json.
                 * AnimationTESR - automatic TESR for animated models.
@@ -8170,7 +8170,7 @@ v99.99-pre
  - v99.99-pre-2546 Add support for alternative maven servers in libraries.
                    Also download sources for public libraries, and atach them in eclipse. DOCUMENTATION!! YAYA!
  - v99.99-pre-2545 Base GenDiff off deobf data's class list instead of the merged jar. Add option to delete target files that generate patches.
- - v99.99-pre-2544 Add Clean Server/Client launcher. Update Start.java to new Main class and login system.
+ - v99.99-pre-2544 Add Clean Server/Client launcher. Update Start.java to new com.lazackna.redstoneadditions.Main class and login system.
  - v99.99-pre-2543 Update eclipse projects for new libraries dependancies, and update packages for new 1.6 classes.
  - v99.99-pre-2542 Add suggestions output if it can.
  - v99.99-pre-2541 Fixed update_packages.py for new folder strcture.

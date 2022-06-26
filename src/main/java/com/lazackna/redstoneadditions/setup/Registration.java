@@ -7,5 +7,6 @@ public class Registration {
     public static void register (IEventBus bus) {
         ItemInit.ITEMS.register(bus);
         BlockInit.BLOCKS.register(bus);
+        TileEntityInit.TILE_ENTITIES.register(bus);
     }
 }

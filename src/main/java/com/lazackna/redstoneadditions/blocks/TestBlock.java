@@ -1,11 +1,14 @@
 package com.lazackna.redstoneadditions.blocks;
 
+import com.lazackna.redstoneadditions.blocks.entity.ProximitySensorTileEntity;
+import com.lazackna.redstoneadditions.setup.TileEntityInit;
 import net.minecraft.block.*;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.*;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.RedstoneSide;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
@@ -13,10 +16,11 @@ import net.minecraft.world.IBlockReader;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
+import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public class TestBlock extends RedstoneDiodeBlock {
+public class TestBlock extends RedstoneDiodeBlock implements ITileEntityProvider{
 
 //    public static final EnumProperty<RedstoneSide> NORTH = BlockStateProperties.NORTH_REDSTONE;
 //    public static final EnumProperty<RedstoneSide> EAST = BlockStateProperties.EAST_REDSTONE;
@@ -88,5 +92,22 @@ public class TestBlock extends RedstoneDiodeBlock {
     @Override
     protected int getOutputSignal(IBlockReader p_176408_1_, BlockPos p_176408_2_, BlockState p_176408_3_) {
         return 15;
+    }
+
+    @Override
+    public boolean hasTileEntity(BlockState state) {
+        return true;
+    }
+
+    @Nullable
+    @Override
+    public TileEntity createTileEntity(BlockState state, IBlockReader world) {
+        return TileEntityInit.PROXIMITY_SENSOR.get().create();
+    }
+
+    @Nullable
+    @Override
+    public TileEntity newBlockEntity(IBlockReader p_196283_1_) {
+        return null;
     }
 }

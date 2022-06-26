@@ -1,10 +1,7 @@
 package com.lazackna.redstoneadditions.setup;
 
 import com.lazackna.redstoneadditions.Main;
-import com.lazackna.redstoneadditions.blocks.TestBlock;
 import com.lazackna.redstoneadditions.blocks.entity.ProximitySensorTileEntity;
-import net.minecraft.block.Block;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraftforge.fml.RegistryObject;
 import net.minecraftforge.registries.DeferredRegister;

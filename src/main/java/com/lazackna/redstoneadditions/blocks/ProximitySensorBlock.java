@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Random;
 
-public class TestBlock extends RedstoneDiodeBlock implements ITileEntityProvider{
+public class ProximitySensorBlock extends RedstoneDiodeBlock implements ITileEntityProvider{
 
 //    public static final EnumProperty<RedstoneSide> NORTH = BlockStateProperties.NORTH_REDSTONE;
 //    public static final EnumProperty<RedstoneSide> EAST = BlockStateProperties.EAST_REDSTONE;
@@ -30,7 +30,7 @@ public class TestBlock extends RedstoneDiodeBlock implements ITileEntityProvider
     public static final DirectionProperty FACING = HorizontalBlock.FACING;
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
-    public TestBlock(Properties p_i48416_1_) {
+    public ProximitySensorBlock(Properties p_i48416_1_) {
         super(p_i48416_1_);
         StateContainer.Builder<Block, BlockState> builder = new StateContainer.Builder<>(this);
         this.createBlockStateDefinition(builder);
@@ -55,34 +55,6 @@ public class TestBlock extends RedstoneDiodeBlock implements ITileEntityProvider
         return s;
 
     }
-    AxisAlignedBB bb = AxisAlignedBB.ofSize(30,30,30);
-
-    @Override
-    public void randomTick(BlockState p_225542_1_, ServerWorld p_225542_2_, BlockPos p_225542_3_, Random p_225542_4_) {
-        AxisAlignedBB bb = AxisAlignedBB.ofSize(30,30,30);
-        List<LivingEntity> entities =  p_225542_2_.getEntitiesOfClass(LivingEntity.class, bb);
-
-        if(entities.size() > -1) {
-            p_225542_2_.setBlock(p_225542_3_, p_225542_1_.setValue(POWERED, true), 2);
-        } else {
-            p_225542_2_.setBlock(p_225542_3_, p_225542_1_.setValue(POWERED, false), 2);
-        }
-    }
-
-    @Override
-    public void tick(BlockState p_225534_1_, ServerWorld p_225534_2_, BlockPos p_225534_3_, Random p_225534_4_) {
-        super.tick(p_225534_1_, p_225534_2_, p_225534_3_, p_225534_4_);
-        AxisAlignedBB bb = AxisAlignedBB.ofSize(30,30,30);
-        List<LivingEntity> entities =  p_225534_2_.getEntitiesOfClass(LivingEntity.class, bb);
-
-        if(entities.size() > -1) {
-            p_225534_2_.setBlock(p_225534_3_, p_225534_1_.setValue(POWERED, true), 2);
-        } else {
-            p_225534_2_.setBlock(p_225534_3_, p_225534_1_.setValue(POWERED, false), 2);
-        }
-
-    }
-
     @Override
     protected int getDelay(BlockState p_196346_1_) {
         return 0;

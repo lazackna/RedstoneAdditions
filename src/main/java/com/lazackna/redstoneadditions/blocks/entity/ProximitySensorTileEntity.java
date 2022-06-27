@@ -9,6 +9,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 
@@ -35,11 +36,10 @@ public class ProximitySensorTileEntity extends TileEntity implements ITickableTi
         List<LivingEntity> entities = Objects.requireNonNull(getLevel()).getEntitiesOfClass(LivingEntity.class, box);
 
         if(entities.size() > 0) {
-            getLevel().setBlock(getBlockPos(), getBlockState().setValue(BlockStateProperties.POWERED, true), 2);
-            getBlockState().setValue(BlockStateProperties.POWERED, true);
+
+            getLevel().setBlock(getBlockPos(), getBlockState().setValue(BlockStateProperties.POWERED, true), 3);
         } else {
-            getBlockState().setValue(BlockStateProperties.POWERED, false);
-            getLevel().setBlock(getBlockPos(), getBlockState().setValue(BlockStateProperties.POWERED, false), 2);
+            getLevel().setBlock(getBlockPos(), getBlockState().setValue(BlockStateProperties.POWERED, false), 3);
         }
     }
 }

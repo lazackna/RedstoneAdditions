@@ -8,13 +8,17 @@ import net.minecraft.item.BlockItemUseContext;
 import net.minecraft.state.*;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.state.properties.RedstoneSide;
+import net.minecraft.tileentity.ConduitTileEntity;
 import net.minecraft.tileentity.DaylightDetectorTileEntity;
 import net.minecraft.tileentity.FurnaceTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.shapes.ISelectionContext;
+import net.minecraft.util.math.shapes.VoxelShape;
 import net.minecraft.world.IBlockReader;
+import net.minecraft.world.LightType;
 import net.minecraft.world.World;
 import net.minecraft.world.server.ServerWorld;
 
@@ -32,20 +36,14 @@ public class ProximitySensorBlock extends Block implements ITileEntityProvider{
     //public static final DirectionProperty FACING = HorizontalBlock.FACING;
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
+    private static final VoxelShape SHAPE = Block.box(5, 5, 5, 11, 11, 11);
+
     public ProximitySensorBlock(Properties p_i48416_1_) {
         super(p_i48416_1_);
         StateContainer.Builder<Block, BlockState> builder = new StateContainer.Builder<>(this);
         this.createBlockStateDefinition(builder);
-        //registerDefaultState(this.defaultBlockState().setValue(FACING, Direction.NORTH));
-//        registerDefaultState(this.defaultBlockState().setValue(POWERED, false));
-
+        registerDefaultState(this.defaultBlockState().setValue(POWERED, false));
     }
-
-//    @Override
-//    public BlockState getStateForPlacement(BlockItemUseContext p_196258_1_) {
-//        return super.getStateForPlacement(p_196258_1_).setValue(FACING,
-//                p_196258_1_.getHorizontalDirection().getOpposite());
-//    }
 
     protected void createBlockStateDefinition(StateContainer.Builder<Block, BlockState> p_206840_1_) {
         p_206840_1_.add(POWERED);
@@ -71,6 +69,13 @@ public class ProximitySensorBlock extends Block implements ITileEntityProvider{
             return 15;
         }
     }
+
+    @Override
+    public VoxelShape getShape(BlockState p_220053_1_, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
+        return SHAPE;
+    }
+
+
 
     @Override
     public boolean hasTileEntity(BlockState state) {

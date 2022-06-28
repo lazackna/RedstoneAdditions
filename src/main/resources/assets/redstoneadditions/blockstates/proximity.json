@@ -1,5 +1,10 @@
 {
-  "variants": {
-    "": {"model": "redstoneadditions:blocks/proximity"}
-  }
+	"variants": {
+		"powered=false":{
+			"model": "redstoneadditions:block/proximity"
+		},
+		"powered=true":{
+			"model": "redstoneadditions:block/proximity"
+		}
+	}
 }

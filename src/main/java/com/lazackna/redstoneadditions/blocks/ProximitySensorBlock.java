@@ -28,15 +28,9 @@ import java.util.Random;
 
 public class ProximitySensorBlock extends Block implements ITileEntityProvider{
 
-//    public static final EnumProperty<RedstoneSide> NORTH = BlockStateProperties.NORTH_REDSTONE;
-//    public static final EnumProperty<RedstoneSide> EAST = BlockStateProperties.EAST_REDSTONE;
-//    public static final EnumProperty<RedstoneSide> SOUTH = BlockStateProperties.SOUTH_REDSTONE;
-//    public static final EnumProperty<RedstoneSide> WEST = BlockStateProperties.WEST_REDSTONE;
-
-    //public static final DirectionProperty FACING = HorizontalBlock.FACING;
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
-    private static final VoxelShape SHAPE = Block.box(5, 5, 5, 11, 11, 11);
+    private static final VoxelShape SHAPE = Block.box(0, 0, 0, 16, 16, 16);
 
     public ProximitySensorBlock(Properties p_i48416_1_) {
         super(p_i48416_1_);
@@ -74,8 +68,6 @@ public class ProximitySensorBlock extends Block implements ITileEntityProvider{
     public VoxelShape getShape(BlockState p_220053_1_, IBlockReader p_220053_2_, BlockPos p_220053_3_, ISelectionContext p_220053_4_) {
         return SHAPE;
     }
-
-
 
     @Override
     public boolean hasTileEntity(BlockState state) {

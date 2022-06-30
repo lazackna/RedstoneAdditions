@@ -1,6 +1,8 @@
 package com.lazackna.redstoneadditions.blocks.entity;
 
 import com.lazackna.redstoneadditions.setup.TileEntityInit;
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.state.properties.BlockStateProperties;
 import net.minecraft.tileentity.FurnaceTileEntity;
@@ -9,6 +11,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.storage.SaveFormat;
 import net.minecraftforge.common.util.Constants;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

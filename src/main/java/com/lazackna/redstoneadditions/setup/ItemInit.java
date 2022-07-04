@@ -14,4 +14,6 @@ public class ItemInit {
 
     public static final RegistryObject<BlockItem> PROXIMITY_BLOCK = ITEMS.register("proximity_block",
             () -> new BlockItem(BlockInit.ProximitySensor.get(), new Item.Properties().tab(ItemGroup.TAB_REDSTONE)));
+    public static final RegistryObject<BlockItem> CABLE_BASIC = ITEMS.register("cable_basic_block",
+            () -> new BlockItem(BlockInit.Cable_Basic.get(), new Item.Properties().tab(ItemGroup.TAB_MISC)));
 }

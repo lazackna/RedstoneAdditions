@@ -20,9 +20,9 @@ public class PowerCable extends Block implements ITileEntityProvider {
     public List<IEnergyStorage> energyNeighbours = new ArrayList<>();
     public PowerCable(Properties p_i48440_1_, CableTier cableTier) {
         super(p_i48440_1_);
+        //p_i48440_1_.randomTicks()
         this.cableTier = cableTier;
     }
-
 
 
     @Override

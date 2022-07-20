@@ -11,6 +11,8 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.nbt.CompoundNBT;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SUpdateTileEntityPacket;
 import net.minecraft.tileentity.ITickableTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
@@ -21,6 +23,7 @@ import net.minecraft.util.math.vector.Vector3i;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import sun.reflect.generics.reflectiveObjects.LazyReflectiveObjectGenerator;
@@ -28,6 +31,7 @@ import sun.reflect.generics.reflectiveObjects.LazyReflectiveObjectGenerator;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
+import java.util.Objects;
 
 public class TileGenerator extends TileEntity implements ITickableTileEntity, IRestorableTileEntity {
 
@@ -36,7 +40,32 @@ public class TileGenerator extends TileEntity implements ITickableTileEntity, IR
 
     private AxisAlignedBB trackingBox;
 
-    private MyEnergyStorage energyStorage = new MyEnergyStorage(1000, 1000);
+   // private MyEnergyStorage energyStorage = new MyEnergyStorage(1000, 1000);
+    private EnergyStorage energyStorage = new EnergyStorage(1000000, 10000, 10000, 0) {
+       @Override
+       public int receiveEnergy(int maxReceive, boolean simulate) {
+           int retval = super.receiveEnergy(maxReceive, simulate);
+           if(!simulate) {
+               assert level != null;
+               level.markAndNotifyBlock(worldPosition,
+                       level.getChunkAt(worldPosition), level.getBlockState(worldPosition),
+                       level.getBlockState(worldPosition), 2, 2);
+           }
+           return retval;
+       }
+
+       @Override
+       public int extractEnergy(int maxExtract, boolean simulate) {
+           int retval = super.extractEnergy(maxExtract, simulate);
+           if(!simulate) {
+               level.markAndNotifyBlock(worldPosition,
+                       level.getChunkAt(worldPosition),
+                               level.getBlockState(worldPosition),
+                                       level.getBlockState(worldPosition), 2, 2);
+           }
+           return retval;
+       }
+   };
     private LazyOptional<IEnergyStorage> energy;
 
     public TileGenerator(CableTier cableTier) {
@@ -53,21 +82,6 @@ public class TileGenerator extends TileEntity implements ITickableTileEntity, IR
         }
     }
 
-    private void sendEnergy() {
-        if(energyStorage.getEnergyStored() > 0) {
-            for()
-        }
-    }
-
-    private void findEntities() {
-
-        //DamageTracker.instance.clear(level.provider.getDimension(), worldPosition);
-
-        List<LivingEntity> entities = level.getEntitiesOfClass(LivingEntity.class, getTrackingBox());
-        for (LivingEntity entity : entities) {
-            //DamageTracker.instance.register(level.provider.getDimension(), worldPosition, entity.getUUID());
-        }
-    }
 
     private AxisAlignedBB getTrackingBox() {
         if (trackingBox == null) {
@@ -86,12 +100,6 @@ public class TileGenerator extends TileEntity implements ITickableTileEntity, IR
         return trackingBox;
     }
 
-    public void senseDamage(LivingEntity entity, float amount) {
-
-        if (getTrackingBox().contains(entity.position())) {
-            energyStorage.generatePower((int) (amount * 5.0f));
-        }
-    }
 
     @Nonnull
     @Override
@@ -114,6 +122,7 @@ public class TileGenerator extends TileEntity implements ITickableTileEntity, IR
         return super.getCapability(cap);
     }
 
+    // energy is being taken but not given
     @Override
     public void load(BlockState p_230337_1_, CompoundNBT p_230337_2_) {
         super.load(p_230337_1_, p_230337_2_);
@@ -122,7 +131,25 @@ public class TileGenerator extends TileEntity implements ITickableTileEntity, IR
 
     @Override
     public void readRestorableFromNBT(CompoundNBT compound) {
-        energyStorage.setEnergy(compound.getInt("energy"));
+        if(compound.get("energy") != null)
+        CapabilityEnergy.ENERGY.readNBT(energyStorage, null, compound.get("energy"));
+      //  energyStorage.setEnergy(compound.getInt("energy"));
+    }
+
+    @Nullable
+    @Override
+    public SUpdateTileEntityPacket getUpdatePacket() {
+        return new SUpdateTileEntityPacket(this.worldPosition, 9, this.getUpdateTag());
+    }
+
+    @Override
+    public void onDataPacket(NetworkManager net, SUpdateTileEntityPacket pkt) {
+        this.readRestorableFromNBT(pkt.getTag());
+    }
+
+    @Override
+    public CompoundNBT getUpdateTag() {
+        return this.save(new CompoundNBT());
     }
 
     @Override
@@ -133,6 +160,6 @@ public class TileGenerator extends TileEntity implements ITickableTileEntity, IR
 
     @Override
     public void writeRestorableFromNBT(CompoundNBT compound) {
-        compound.putInt("energy", energyStorage.getEnergyStored());
+        compound.put("energy", Objects.requireNonNull(CapabilityEnergy.ENERGY.writeNBT(energyStorage, null)));
     }
 }

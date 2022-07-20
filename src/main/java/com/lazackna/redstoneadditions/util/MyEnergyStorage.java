@@ -7,6 +7,8 @@ public class MyEnergyStorage extends EnergyStorage {
         super(capacity, maxTransfer, maxTransfer, 0);
     }
 
+
+
     public void setEnergy(int energy) {
         this.energy = energy;
     }

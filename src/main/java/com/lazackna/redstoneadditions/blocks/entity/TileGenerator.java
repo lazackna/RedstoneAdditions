@@ -41,9 +41,9 @@ public class TileGenerator extends TileEntity implements ITickableTileEntity, IR
     private PowerCable myCable = null;
 
     private AxisAlignedBB trackingBox;
-
+    // turn this into a redstone activated power buffer. Mods like mekanism will need to use pull mode to extract the power
    // private MyEnergyStorage energyStorage = new MyEnergyStorage(1000, 1000);
-    private EnergyStorage energyStorage = new EnergyStorage(1000000, 10000, 10000, 0) {
+    private EnergyStorage energyStorage = new EnergyStorage(100, 100, 100, 0) {
        @Override
        public int receiveEnergy(int maxReceive, boolean simulate) {
            int retval = super.receiveEnergy(maxReceive, simulate);
@@ -55,7 +55,7 @@ public class TileGenerator extends TileEntity implements ITickableTileEntity, IR
            }
            return retval;
        }
-       
+
        @Override
        public int extractEnergy(int maxExtract, boolean simulate) {
            int retval = super.extractEnergy(maxExtract, simulate);
@@ -68,7 +68,8 @@ public class TileGenerator extends TileEntity implements ITickableTileEntity, IR
            return retval;
        }
 
-   };
+    };
+
     private LazyOptional<IEnergyStorage> energy;
 
     public TileGenerator(CableTier cableTier) {
@@ -101,7 +102,12 @@ public class TileGenerator extends TileEntity implements ITickableTileEntity, IR
                 if(ent != null) {
 
                     ent.getCapability(CapabilityEnergy.ENERGY)
-                            .ifPresent(capability -> capability.receiveEnergy(amount, false));
+                            .ifPresent(capability -> {
+                                int stored = capability.getEnergyStored();
+                                int max = capability.getMaxEnergyStored();
+                                int received = capability.receiveEnergy(amount, false);
+                                this.energyStorage.extractEnergy(received, false);
+                            });
                 }
             };
 

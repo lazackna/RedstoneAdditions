@@ -18,6 +18,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityType;
 import net.minecraft.util.Direction;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.vector.Vector3d;
 import net.minecraft.util.math.vector.Vector3i;
 import net.minecraftforge.common.capabilities.Capability;
@@ -32,6 +33,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class TileGenerator extends TileEntity implements ITickableTileEntity, IRestorableTileEntity {
 
@@ -53,7 +55,7 @@ public class TileGenerator extends TileEntity implements ITickableTileEntity, IR
            }
            return retval;
        }
-
+       
        @Override
        public int extractEnergy(int maxExtract, boolean simulate) {
            int retval = super.extractEnergy(maxExtract, simulate);
@@ -65,6 +67,7 @@ public class TileGenerator extends TileEntity implements ITickableTileEntity, IR
            }
            return retval;
        }
+
    };
     private LazyOptional<IEnergyStorage> energy;
 
@@ -77,6 +80,30 @@ public class TileGenerator extends TileEntity implements ITickableTileEntity, IR
     @Override
     public void tick() {
         if(!level.isClientSide) {
+
+            if(new Object() {
+                public boolean canReceiveEnergy(BlockPos pos) {
+                    AtomicBoolean retval = new AtomicBoolean(false);
+                    TileEntity ent = level.getBlockEntity(pos);
+                    if(ent != null)
+                        ent.getCapability(CapabilityEnergy.ENERGY).ifPresent(
+
+                                capability -> {
+                                    retval.set(true);
+                                   // capability.
+                                }
+                        );
+                    return retval.get();
+                }
+            }.canReceiveEnergy(new BlockPos(getBlockPos().getX(), getBlockPos().getY() - 1, getBlockPos().getZ()))) {
+                TileEntity ent = level.getBlockEntity(new BlockPos(getBlockPos().getX(), getBlockPos().getY() - 1, getBlockPos().getZ()));
+                int amount = 100;
+                if(ent != null) {
+
+                    ent.getCapability(CapabilityEnergy.ENERGY)
+                            .ifPresent(capability -> capability.receiveEnergy(amount, false));
+                }
+            };
 
 
         }
